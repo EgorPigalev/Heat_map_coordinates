@@ -27,20 +27,20 @@ LRESULT CALLBACK LogMouse(int iCode, WPARAM wParam, LPARAM lParam)
 		MSLLHOOKSTRUCT* mouseInfo = (MSLLHOOKSTRUCT*)lParam;
 		x = mouseInfo->pt.x;
 		y = mouseInfo->pt.y;
-		LPWSTR* str = (LPWSTR)calloc(500, sizeof(LPWSTR));
-		swprintf(str, 500, L"%d;%d\n", x, y);
+		char* str = calloc(500, sizeof(char));
+		sprintf(str,"%d;%d\n", x, y);
 		WriteToFile(str);
 		free(str);
 	}
 	return CallNextHookEx(NULL, iCode, wParam, lParam);
 }
 
-VOID WriteToFile(LPWSTR wstr)
+VOID WriteToFile(char* wstr)
 {
 	FILE* f = NULL;
 	if (!_wfopen_s(&f, L"..\\CoordinatesClickMouse.txt", L"ab"))
 	{
-		fwrite(wstr, sizeof(WCHAR), wcslen(wstr), f);
+		fwrite(wstr, sizeof(char), strlen(wstr), f);
 		fclose(f);
 	}
 }
